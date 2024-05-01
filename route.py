@@ -106,7 +106,7 @@ class Route():
           return self.render_some_json("welcome/myvid.json")
 
     def createvideo(self,search):
-        myparam=self.get_post_data()(params=("title","description","filename","user_id",))
+        myparam=self.get_post_data()(params=("thumbnail","title","description","filename","user_id",))
         hi=self.db.Video.create(myparam)
         if hi:
           self.set_notice("votre vidéo a été uploadée à youtube")

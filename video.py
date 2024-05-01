@@ -22,6 +22,7 @@ class Video(Model):
         id integer primary key autoincrement,
         user_id text,
             title text,
+            thumbnail text,
             polarity text,
             description text,
             ip text,
@@ -80,7 +81,7 @@ class Video(Model):
         myhash["ip"]=self.whatismyip()
         myhash["polarity"]=self.whatismypolarity(myhash["description"])
         try:
-          self.cur.execute("insert into video (polarity,ip,user_id,title,description,filename) values (:polarity,:ip,:user_id,:title,:description,:filename)",myhash)
+          self.cur.execute("insert into video (thumbnail,polarity,ip,user_id,title,description,filename) values (:thumbnail,:polarity,:ip,:user_id,:title,:description,:filename)",myhash)
           self.con.commit()
           myid=str(self.cur.lastrowid)
         except Exception as e:
