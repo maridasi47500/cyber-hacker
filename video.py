@@ -4,12 +4,17 @@ import sys
 from urllib.request import urlopen
 import re as r
 from textblob import TextBlob
+from langdetect import DetectorFactory
+from langdetect import detect
+from google_trans_new import google_translator  
+
 
 
 import re
 from model import Model
 class Video(Model):
     def __init__(self):
+        DetectorFactory.seed = 0
         self.con=sqlite3.connect(self.mydb)
         self.con.row_factory = sqlite3.Row
         self.cur=self.con.cursor()
@@ -24,6 +29,14 @@ class Video(Model):
                     );""")
         self.con.commit()
         #self.con.close()
+    def detect_and_translate(text,target_lang):
+        result_lang = detect(text)
+        if result_lang == target_lang:
+          return text 
+        else:
+          translator = google_translator()
+          translate_text = translator.translate(text,lang_src=result_lang,lang_tgt=target_lang)
+          return translate_text 
     def getall(self):
         self.cur.execute("select video.*,user.username from video left join user on user.id = video.user_id order by video.id desc limit 5")
 
@@ -33,7 +46,7 @@ class Video(Model):
         d = str(urlopen('http://checkip.dyndns.com/').read())
         return r.compile(r'Address: (\d+\.\d+\.\d+\.\d+)').search(d).group(1)
     def whatismypolarity(self,text):
-        blob = TextBlob(text)
+        blob = TextBlob(self.detect_and_translate(text,target_lang="en"))
         sentiment = blob.sentiment.polarity
         return sentiment
     def deletebyid(self,myid):
