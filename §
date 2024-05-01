@@ -64,7 +64,6 @@ class Comment(Model):
         print(myhash,myhash.keys())
         myid=None
         myhash["ip"]=self.whatismyip()
-        myhash["polarity"]=self.whatismypolarity(myhash["content"])
         try:
             self.cur.execute("insert into comment (polarity,video_id,user_id,content,ip) values (:polarity,:video_id,:user_id,:content,:ip)",myhash)
           self.con.commit()

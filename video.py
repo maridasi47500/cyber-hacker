@@ -3,6 +3,7 @@ import sqlite3
 import sys
 from urllib.request import urlopen
 import re as r
+from textblob import TextBlob
 
 
 import re
@@ -16,6 +17,7 @@ class Video(Model):
         id integer primary key autoincrement,
         user_id text,
             title text,
+            polarity text,
             description text,
             ip text,
             filename text
@@ -30,9 +32,11 @@ class Video(Model):
     def whatismyip(self):
         d = str(urlopen('http://checkip.dyndns.com/').read())
         return r.compile(r'Address: (\d+\.\d+\.\d+\.\d+)').search(d).group(1)
-
+    def whatismypolarity(self,text):
+        blob = TextBlob(text)
+        sentiment = blob.sentiment.polarity
+        return sentiment
     def deletebyid(self,myid):
-
         self.cur.execute("delete from video where id = ?",(myid,))
         job=self.cur.fetchall()
         self.con.commit()
@@ -61,8 +65,9 @@ class Video(Model):
         print(myhash,myhash.keys())
         myid=None
         myhash["ip"]=self.whatismyip()
+        myhash["polarity"]=self.whatismypolarity(myhash["content"])
         try:
-          self.cur.execute("insert into video (ip,user_id,title,description,filename) values (:ip,:user_id,:title,:description,:filename)",myhash)
+            self.cur.execute("insert into video (polarity,ip,user_id,title,description,filename) values (:polarity,:ip,:user_id,:title,:description,:filename)",myhash)
           self.con.commit()
           myid=str(self.cur.lastrowid)
         except Exception as e:
