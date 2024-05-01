@@ -1,6 +1,6 @@
  <!DOCTYPE html><html>
         <head>
-        <title>splashy iguana tour</title>
+        <title>youtube</title>
 <meta charset="UTF-8">
 
 
@@ -15,19 +15,13 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><img src="/pic/iguane.webp"/>Splashy Iguana Tours</a>
+    <a class="navbar-brand" href="/"><span class="logo-youtube">You</span>tube</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 	<%=Fichier("./mypage","connexion.html").lire() if session["user_id"] == "" else Fichier("./mypage","deconnexion.html").lire() %>
-        <li class="nav-item">
-          <a class="nav-link" href="/booktour">Réserver une visite</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/apply">Apply</a>
-        </li>
       </ul>
     </div>
   </div>

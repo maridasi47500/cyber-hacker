@@ -24,37 +24,9 @@
 	width: 100%;
 	height: 100%;
 }
-input#to_email {
-	    width: 95%;
-	        /* float: left; */
-    }
-input#object_email {
-	    width: 100%;
-	        /* float: left; */
-    }
-#content_email {
-	    width: 100%;
-	    height: 100%;
-    }
-    form.sendemail {
-	        height: 76%;
-		    float: left;
-		        width: 100%;
-		}
-		.field.contentfield {
-			    height: 73%;
-		    }
-		    input#submit_email1 {
-			        float: right;
-			}
-			.actions{
-				padding-top:5px;
-			}
-			
-			button#btn1 {
-				    position: fixed;
-				        bottom: 0;
-					    right: 0;
-					        height: 7%;
-						   display:none; 
-					}
+.logo-youtube{
+color:white;
+font-size:30px;
+background:red;
+border-radius:99px;
+}

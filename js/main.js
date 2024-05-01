@@ -1,29 +1,5 @@
-function myurl(value){
-	inserershorturl.value=(new URL(value)).origin;
-	$.ajax({url:"/mydiv",type:"post",data:{"user_id":myuserid.innerHTML,"div1": inserershorturl.value},
-	success:function(data){
-		if (data.div1.length > 0){
-		insererurldiv1.value=data.div1;
-		insererurldiv1.parentElement.style.display="block";
-		}else{
-		insererurldiv1.value="";
-		insererurldiv1.parentElement.style.display="block";
-		}
-	}});
-}
-function myband(value){
-	$.ajax({url:"/myband",type:"post",data:{"div1": value},
-	success:function(data){
-		var member_list=data.member;
-	        inserermembre.innerHTML="<option value=\"\"></option>";
-		for(var i = 0;i<member_list.length;i++){
-			inserermembre.innerHTML+="<option value=\""+member_list[i].id+"\">"+member_list[i].name+"</option>";
-		}
-	}});
-}
-
 $(function(){
-if (window.location.pathname === "/addjob" && myuserid.innerHTML == "") {
+if (window.location.pathname === "/addvideo" && myuserid.innerHTML === "") {
 alert("pas connecté-e vous allez être redirigé(e)")
 window.location="/sign_in";
 

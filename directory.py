@@ -1,6 +1,7 @@
 class Directory():
     session=False
     pic=False
+    vid=False
     music=False
     redirect=False
     code422=False
@@ -94,6 +95,10 @@ class Directory():
         return self.music
     def set_music(self,html):
         self.music=html
+    def get_vid(self):
+        return self.vid
+    def set_vid(self,html):
+        self.vid=html
     def get_pic(self):
         return self.pic
     def set_pic(self,html):

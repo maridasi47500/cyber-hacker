@@ -1,0 +1,19 @@
+<h1>AJouter une vidéo </h1>
+<form action="/createvideo" method="post">
+<input type="hidden" name="user_id" value="<%=session["user_id"]%>" id="video_user"/>
+<div class="field">
+<label for="video_title">Titre</label>
+<input type="text" name="title" id="video_title"/>
+</div>
+<div class="field">
+<label for="video_filename">uploadez la vidéo</label>
+<input type="file" name="filename" id="video_filename"/>
+</div>
+<div class="field">
+<label for="video_description">description</label>
+<textarea name="description" id="video_description"></textarea>
+</div>
+<div class="field">
+<input type="submit" value="ok" name="valider" id="video_submit"/>
+</div>
+</form>

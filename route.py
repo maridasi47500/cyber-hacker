@@ -3,6 +3,7 @@ from render_figure import RenderFigure
 from user import User
 from mydb import Mydb
 
+from vid import Vid
 
 from mypic import Pic
 from javascript import Js
@@ -14,7 +15,7 @@ import sys
 class Route():
     def __init__(self):
         self.dbUsers=User()
-        self.Program=Directory("Splashy Iguana Tours")
+        self.Program=Directory("Youtube Upload your vids urself")
         self.Program.set_path("./")
         self.mysession={"notice":None,"email":None,"name":None}
         self.render_figure=RenderFigure(self.Program)
@@ -92,14 +93,16 @@ class Route():
           self.set_notice("erreur quand vous avez envoyé le formulaire")
         self.render_figure.set_param("search",s)
         return self.render_figure.render_figure("welcome/voirsearch.html")
-    def createmusician(self,search):
-        myparam=self.get_post_data()(params=("name",))
-        hi=self.db.Musician.create(myparam)
+    def createvideo(self,search):
+        myparam=self.get_post_data()(params=("title","description","filename","user_id",))
+        hi=self.db.Video.create(myparam)
         if hi:
-          self.set_notice("votre musician a été ajouté")
+          self.set_notice("votre vidéo a été uploadée à youtube")
+          self.render_figure.set_param("video_id", hi["video_id"])
+          return self.render_some_json("welcome/myvid.json")
         else:
           self.set_notice("erreur quand vous avez envoyé le formulaire")
-        return self.render_some_json("welcome/mypic.json")
+          return self.render_some_json("welcome/mypic.json")
     def mydiv(self,search):
         myparam=self.get_some_post_data(params=("div1","user_id"))
         hi=self.db.Link.find_by_url(url=myparam["div1"],user_id=myparam["user_id"])
@@ -243,6 +246,7 @@ class Route():
         return self.render_figure.render_figure("welcome/aboutme.html")
     def hello(self,search):
         print("hello action")
+        self.render_figure.set_param("videos",self.db.Video.getall())
         return self.render_figure.render_figure("welcome/index.html")
     def delete_user(self,params={}):
         getparams=("id",)
@@ -263,12 +267,12 @@ class Route():
         myparam=self.get_this_route_param(getparams,params)
         self.render_figure.set_param("post",self.db.Post.getbyid(myparam["id"]))
         return self.render_figure.render_figure("ajouter/editerpost.html")
-    def seejob(self,params={}):
+    def seevideo(self,params={}):
         getparams=("id",)
         print("get param, action see my new",getparams)
         myparam=self.get_this_route_param(getparams,params)
-        self.render_figure.set_param("job",self.db.Job.getbyid(myparam["id"]))
-        return self.render_figure.render_figure("ajouter/voirjob.html")
+        self.render_figure.set_param("video",self.db.Video.getbyid(myparam["id"]))
+        return self.render_figure.render_figure("ajouter/voirvideo.html")
     def voirpersonne(self,params={}):
         getparams=("id",)
         print("get param, action see my new",getparams)
@@ -311,8 +315,8 @@ class Route():
         return self.render_figure.render_json()
     def search(self,search): 
         return self.render_figure.render_figure("ajouter/search.html")
-    def addjob(self,search): 
-        return self.render_figure.render_figure("ajouter/job.html")
+    def addvideo(self,search): 
+        return self.render_figure.render_figure("ajouter/video.html")
     def addmember(self,search): 
         return self.render_figure.render_figure("ajouter/member.html")
     def carnetdadresses(self,search):
@@ -377,7 +381,7 @@ class Route():
         return self.render_figure.render_figure("ajouter/notebook.html")
 
     def save_user(self,params={}):
-        myparam=self.get_post_data()(params=("email","country_id","phone","password","passwordconfirmation"))
+        myparam=self.get_post_data()(params=("username","email","country_id","phone","password","passwordconfirmation"))
         self.user=self.dbUsers.create(myparam)
         if self.user["user_id"]:
             self.set_session(self.user)
@@ -413,6 +417,9 @@ class Route():
         if path and path.endswith("png"):
             self.Program=Pic(path)
             self.Program.set_path("./")
+        elif path and path.endswith("mp4"):
+            self.Program=Vid(path)
+            self.Program.set_path("./")
         elif path and path.endswith("mp3"):
             self.Program=Music(path)
             self.Program.set_path("./")
@@ -441,8 +448,9 @@ class Route():
             path=path.split("?")[0]
             print("link route ",path)
             ROUTES={
-            '^/addjob$': self.addjob,
-            "^/seejob/([0-9]+)$":self.seejob,
+            '^/createvideo$': self.createvideo,
+            '^/addvideo$': self.addvideo,
+            "^/seevideo/([0-9]+)$":self.seevideo,
             '^/welcome$': self.welcome,
             '^/sign_in$': self.signin,
             '^/sign_up$': self.signup,
