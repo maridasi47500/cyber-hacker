@@ -66,7 +66,7 @@ class Comment(Model):
         myhash["ip"]=self.whatismyip()
         myhash["polarity"]=self.whatismypolarity(myhash["content"])
         try:
-            self.cur.execute("insert into comment (polarity,video_id,user_id,content,ip) values (:polarity,:video_id,:user_id,:content,:ip)",myhash)
+          self.cur.execute("insert into comment (polarity,video_id,user_id,content,ip) values (:polarity,:video_id,:user_id,:content,:ip)",myhash)
           self.con.commit()
           myid=str(self.cur.lastrowid)
         except Exception as e:

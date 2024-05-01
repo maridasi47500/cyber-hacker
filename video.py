@@ -65,9 +65,9 @@ class Video(Model):
         print(myhash,myhash.keys())
         myid=None
         myhash["ip"]=self.whatismyip()
-        myhash["polarity"]=self.whatismypolarity(myhash["content"])
+        myhash["polarity"]=self.whatismypolarity(myhash["description"])
         try:
-            self.cur.execute("insert into video (polarity,ip,user_id,title,description,filename) values (:polarity,:ip,:user_id,:title,:description,:filename)",myhash)
+          self.cur.execute("insert into video (polarity,ip,user_id,title,description,filename) values (:polarity,:ip,:user_id,:title,:description,:filename)",myhash)
           self.con.commit()
           myid=str(self.cur.lastrowid)
         except Exception as e:
