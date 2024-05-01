@@ -3,6 +3,11 @@
 
 <h1><%=video["title"]%>
 </h1>
-<p><%=video["username"]%>
+<p><%=video["username"]%></p>
+<p><span id="adresseip"><%=video["ip"]%></span>
+<a id="voiradresse" onclick="adresseip.style.display=adresseip.style.display === 'block' ? 'none' : 'block';this.innerHTML=adresseip.style.display === 'block' ? 'moins' : 'voir l\'adresse ip';return false;" href="">Voir son adresse ip </a>
+</p>
 <p><%=video["description"]%>
 </p>
+<%=Fichier("./ajouter","comment1.html").lire() if session["user_id"] == "" else Fichier("./ajouter","comment.html").lire() %>
+<%=render_collection(collection=params['comments'], partial='welcome/_comment.html', as_='comment')%>

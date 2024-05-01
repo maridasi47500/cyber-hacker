@@ -93,6 +93,18 @@ class Route():
           self.set_notice("erreur quand vous avez envoyé le formulaire")
         self.render_figure.set_param("search",s)
         return self.render_figure.render_figure("welcome/voirsearch.html")
+    def createcomment(self,search):
+        myparam=self.get_post_data()(params=("user_id","video_id","content",))
+        hi=self.db.Comment.create(myparam)
+        if hi:
+          self.set_notice("vous avez commentée la vidéo")
+          self.render_figure.set_param("video_id", myparam["video_id"])
+          return self.render_some_json("welcome/myvid.json")
+        else:
+          self.set_notice("erreur quand vous avez envoyé le formulaire")
+          self.render_figure.set_param("video_id", myparam["video_id"])
+          return self.render_some_json("welcome/myvid.json")
+
     def createvideo(self,search):
         myparam=self.get_post_data()(params=("title","description","filename","user_id",))
         hi=self.db.Video.create(myparam)
@@ -272,6 +284,7 @@ class Route():
         print("get param, action see my new",getparams)
         myparam=self.get_this_route_param(getparams,params)
         self.render_figure.set_param("video",self.db.Video.getbyid(myparam["id"]))
+        self.render_figure.set_param("comments",self.db.Comment.getallbyvideoid(myparam["id"]))
         return self.render_figure.render_figure("ajouter/voirvideo.html")
     def voirpersonne(self,params={}):
         getparams=("id",)
@@ -448,6 +461,7 @@ class Route():
             path=path.split("?")[0]
             print("link route ",path)
             ROUTES={
+            '^/createcomment$': self.createcomment,
             '^/createvideo$': self.createvideo,
             '^/addvideo$': self.addvideo,
             "^/seevideo/([0-9]+)$":self.seevideo,

@@ -1,0 +1,7 @@
+<div class="comment">
+	<p><%=comment["username"]%></p>
+	<p><span style="display:none;" id="adresseip<%=comment["id"]%>"><%=comment["ip"]%></span>
+<a class="voiradresse" onclick="adresseip<%=comment["id"]%>.style.display=adresseip<%=comment["id"]%>.style.display === 'block' ? 'none' : 'block';this.innerHTML=adresseip<%=comment["id"]%>.style.display === 'block' ? 'moins' : 'voir l\'adresse ip';return false;" href="">Voir son adresse ip </a>
+</p>
+<p><%=comment["content"]%>
+</div>

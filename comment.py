@@ -1,44 +1,41 @@
 # coding=utf-8
 import sqlite3
 import sys
+import re
 from urllib.request import urlopen
 import re as r
 
-
-import re
 from model import Model
-class Video(Model):
+class Comment(Model):
     def __init__(self):
         self.con=sqlite3.connect(self.mydb)
         self.con.row_factory = sqlite3.Row
         self.cur=self.con.cursor()
-        self.cur.execute("""create table if not exists video(
+        self.cur.execute("""create table if not exists comment(
         id integer primary key autoincrement,
-        user_id text,
-            title text,
-            description text,
-            ip text,
-            filename text
+        video_id text,
+            user_id text,
+            content text,
+            ip text
                     );""")
         self.con.commit()
         #self.con.close()
-    def getall(self):
-        self.cur.execute("select video.*,user.username from video left join user on user.id = video.user_id order by video.id desc limit 5")
-
-        row=self.cur.fetchall()
-        return row
     def whatismyip(self):
         d = str(urlopen('http://checkip.dyndns.com/').read())
         return r.compile(r'Address: (\d+\.\d+\.\d+\.\d+)').search(d).group(1)
+    def getallbyvideoid(self,videoid):
+        self.cur.execute("select comment.*,user.username from comment left join user on user.id = comment.user_id where comment.video_id = ?",(videoid,))
 
+        row=self.cur.fetchall()
+        return row
     def deletebyid(self,myid):
 
-        self.cur.execute("delete from video where id = ?",(myid,))
+        self.cur.execute("delete from comment where id = ?",(myid,))
         job=self.cur.fetchall()
         self.con.commit()
         return None
     def getbyid(self,myid):
-        self.cur.execute("select video.*, user.username from video left join user on user.id = video.user_id where video.id = ?",(myid,))
+        self.cur.execute("select * from comment where id = ?",(myid,))
         row=dict(self.cur.fetchone())
         print(row["id"], "row id")
         job=self.cur.fetchall()
@@ -62,14 +59,14 @@ class Video(Model):
         myid=None
         myhash["ip"]=self.whatismyip()
         try:
-          self.cur.execute("insert into video (ip,user_id,title,description,filename) values (:ip,:user_id,:title,:description,:filename)",myhash)
+          self.cur.execute("insert into comment (video_id,user_id,content,ip) values (:video_id,:user_id,:content,:ip)",myhash)
           self.con.commit()
           myid=str(self.cur.lastrowid)
         except Exception as e:
           print("my error"+str(e))
         azerty={}
-        azerty["video_id"]=myid
-        azerty["notice"]="votre video a été ajouté"
+        azerty["comment_id"]=myid
+        azerty["notice"]="votre comment a été ajouté"
         return azerty
 
 

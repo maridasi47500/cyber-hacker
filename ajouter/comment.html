@@ -1,0 +1,16 @@
+<div class="commentform">
+	        <p>commenter la vidéo</p>
+		        <form action="/createcomment" method="post">
+				                <input type="hidden" value="<%=params["video"]["id"]%>" name="video_id"/>
+						                <input type="hidden" value="<%=session["user_id"]%>" name="user_id"/>
+								                <div class="champ">
+											                        <label for="comment_content">
+															                                content
+																			                        </label>
+																						                        <textarea id="comment_content" name="content"></textarea>
+																									                </div>
+																											                <div class="actions">
+																														                        <input type="submit" value="submit comment" name="submit"/>
+																																	                </div>
+																																			        </form>
+</div>
