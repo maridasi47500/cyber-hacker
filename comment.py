@@ -6,7 +6,7 @@ from urllib.request import urlopen
 import re as r
 from langdetect import DetectorFactory
 from langdetect import detect
-from google_trans_new import google_translator
+from deep_translator import GoogleTranslator
 
 from model import Model
 from textblob import TextBlob
@@ -25,19 +25,20 @@ class Comment(Model):
                     );""")
         self.con.commit()
         #self.con.close()
-    def detect_and_translate(text,target_lang):
+    def detect_and_translate(self,text,target_lang):
         result_lang = detect(text)
+        print("langue détectée:"+result_lang)
         if result_lang == target_lang:
           return text 
         else:
-          translator = google_translator()
-          translate_text = translator.translate(text,lang_src=result_lang,lang_tgt=target_lang)
+          translator = GoogleTranslator(source=result_lang, target=target_lang)
+          translate_text = translator.translate(text)
           return translate_text 
     def whatismyip(self):
         d = str(urlopen('http://checkip.dyndns.com/').read())
         return r.compile(r'Address: (\d+\.\d+\.\d+\.\d+)').search(d).group(1)
     def whatismypolarity(self,text):
-        blob = TextBlob(self.detect_and_translate(text,target_lang="en"))
+        blob = TextBlob(self.detect_and_translate(text,"en"))
         sentiment = blob.sentiment.polarity
         return sentiment
     def getallbyvideoid(self,videoid):

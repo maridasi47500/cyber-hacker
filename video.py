@@ -6,8 +6,8 @@ import re as r
 from textblob import TextBlob
 from langdetect import DetectorFactory
 from langdetect import detect
-from google_trans_new import google_translator  
 
+from deep_translator import GoogleTranslator
 
 
 import re
@@ -29,13 +29,13 @@ class Video(Model):
                     );""")
         self.con.commit()
         #self.con.close()
-    def detect_and_translate(text,target_lang):
+    def detect_and_translate(self,text,target_lang):
         result_lang = detect(text)
         if result_lang == target_lang:
           return text 
         else:
-          translator = google_translator()
-          translate_text = translator.translate(text,lang_src=result_lang,lang_tgt=target_lang)
+          translator = GoogleTranslator(source=result_lang, target=target_lang)
+          translate_text = translator.translate(text)
           return translate_text 
     def getall(self):
         self.cur.execute("select video.*,user.username from video left join user on user.id = video.user_id order by video.id desc limit 5")
